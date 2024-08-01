@@ -1,4 +1,4 @@
-package tool
+package claw
 
 import (
 	"fmt"

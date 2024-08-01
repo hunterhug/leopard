@@ -1,9 +1,10 @@
-package tool
+package claw
 
 import (
 	"fmt"
 	"math"
 	"math/rand"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -149,4 +150,8 @@ func GetRandomNumbers() string {
 	}
 
 	return s
+}
+
+func ReadFromFile(filepath string) ([]byte, error) {
+	return os.ReadFile(filepath)
 }
