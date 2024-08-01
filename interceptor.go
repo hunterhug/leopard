@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	log "github.com/hunterhug/golog"
+	"github.com/hunterhug/leopard/claw"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -16,7 +17,7 @@ func LogInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServer
 	requestType := reflect.TypeOf(req).String()
 	traceRequestLogStr := "Receive rpc request: " + requestType
 
-	log.DebugContextWithFields(ctx, map[string]interface{}{"service.grpc.request": cat.ToJsonString(req)}, traceRequestLogStr)
+	log.DebugContextWithFields(ctx, map[string]interface{}{"service.grpc.request": claw.ToJsonString(req)}, traceRequestLogStr)
 
 	resp, err = handler(ctx, req)
 	errMsg := ""
@@ -26,7 +27,7 @@ func LogInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServer
 
 	traceResponseLogStr := fmt.Sprintf("Receive rpc response: %s", errMsg)
 
-	log.DebugContextWithFields(ctx, map[string]interface{}{"service.grpc.response": cat.ToJsonString(resp)}, traceResponseLogStr)
+	log.DebugContextWithFields(ctx, map[string]interface{}{"service.grpc.response": claw.ToJsonString(resp)}, traceResponseLogStr)
 	return
 }
 
@@ -45,7 +46,7 @@ func TraceInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 
 	if len(traceIdList) == 0 {
 		//  自定义事务ID
-		ctx = metadata.AppendToOutgoingContext(ctx, ContextTraceId, cat.GetGUID())
+		ctx = metadata.AppendToOutgoingContext(ctx, ContextTraceId, claw.GetGUID())
 	}
 
 	return handler(ctx, req)
